@@ -1,0 +1,5 @@
+{
+  "version": "3.1.2",
+  "updated_at": "2026-04-11T22:15:00.000Z",
+  "changelog": "Fix: daily reminders no longer fire outside their time window"
+}

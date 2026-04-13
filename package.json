@@ -1,0 +1,11 @@
+{
+  "name": "telegram-assistant",
+  "version": "2.0.0",
+  "description": "Personal Telegram assistant powered by Claude Code CLI (Max subscription)",
+  "type": "module",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

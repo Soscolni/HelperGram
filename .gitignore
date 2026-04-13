@@ -1,0 +1,11 @@
+node_modules/
+.env
+data.json
+usage.json
+daily/
+memory.md
+.tmp/
+whisper/
+.restart
+history.json
+tasks/
