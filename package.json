@@ -1,11 +1,48 @@
 {
-  "name": "telegram-assistant",
-  "version": "2.0.0",
-  "description": "Personal Telegram assistant powered by Claude Code CLI (Max subscription)",
+  "name": "helpergram",
+  "version": "4.0.0",
+  "description": "Personal Telegram assistant with easy GUI setup — powered by Claude, GPT, or Gemini",
   "type": "module",
-  "main": "index.js",
-  "scripts": { "start": "node index.js" },
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win"
+  },
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@google/generative-ai": "^0.21.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.80.0"
+  },
+  "devDependencies": {
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.helpergram.app",
+    "productName": "HelperGram",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "version.json",
+        "to": "version.json"
+      }
+    ]
   }
 }

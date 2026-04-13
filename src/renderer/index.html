@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HelperGram Setup</title>
+  <link rel="stylesheet" href="setup.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>HelperGram</h1>
+    <p>Personal Telegram Assistant</p>
+  </div>
+
+  <div class="steps">
+    <div class="step-dot active" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+    <div class="step-dot" id="dot-3"></div>
+  </div>
+
+  <!-- Step 1: Telegram Bot -->
+  <div class="card active" id="step-1">
+    <h2>Step 1: Telegram Bot</h2>
+    <h3>Create a bot via @BotFather and connect it</h3>
+
+    <div class="instructions">
+      <ol>
+        <li>Open <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram</li>
+        <li>Send <strong>/newbot</strong> and follow the prompts</li>
+        <li>Copy the bot token and paste it below</li>
+      </ol>
+    </div>
+
+    <div class="field">
+      <label>Bot Token</label>
+      <input type="text" id="bot-token" placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11">
+    </div>
+
+    <div id="token-status"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="validate-token" onclick="validateToken()">Validate</button>
+    </div>
+
+    <!-- Phase 2: Chat ID detection -->
+    <div id="chat-phase" class="hidden" style="margin-top: 20px;">
+      <h3>Now open your bot in Telegram and send <strong>/start</strong></h3>
+      <div class="status loading" id="chat-status">
+        <span class="spinner"></span> Waiting for /start message...
+      </div>
+    </div>
+
+    <div class="btn-row" id="step1-next" style="display: none;">
+      <button class="btn btn-success" onclick="goToStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: LLM Configuration -->
+  <div class="card" id="step-2">
+    <h2>Step 2: AI Model</h2>
+    <h3>Choose your AI provider and model</h3>
+
+    <div class="field">
+      <label>Provider</label>
+      <select id="llm-vendor" onchange="onVendorChange()">
+        <option value="">Select a provider...</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Model</label>
+      <select id="llm-model" disabled>
+        <option value="">Select provider first...</option>
+      </select>
+    </div>
+
+    <div class="field" id="api-key-field">
+      <label>API Key</label>
+      <input type="password" id="api-key" placeholder="sk-...">
+    </div>
+
+    <div id="llm-status"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+      <button class="btn btn-primary" id="validate-llm" onclick="validateLLM()">Validate</button>
+    </div>
+
+    <div class="btn-row" id="step2-next" style="display: none;">
+      <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+      <button class="btn btn-success" onclick="goToStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Confirm & Launch -->
+  <div class="card" id="step-3">
+    <h2>Step 3: Confirm & Launch</h2>
+    <h3>Review your settings</h3>
+
+    <div id="summary"></div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="start-on-boot">
+      <label for="start-on-boot">Start HelperGram when Windows starts</label>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+      <button class="btn btn-success" id="launch-btn" onclick="launchBot()">Launch HelperGram</button>
+    </div>
+
+    <div id="launch-status"></div>
+  </div>
+
+  <script src="setup.js"></script>
+</body>
+</html>

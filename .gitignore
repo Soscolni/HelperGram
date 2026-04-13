@@ -9,3 +9,6 @@ whisper/
 .restart
 history.json
 tasks/
+dist/
+config.json
+package-lock.json
