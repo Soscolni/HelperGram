@@ -15,9 +15,14 @@ let whisperExe = "";
 export function initWhisper(baseDir) {
   whisperDir = path.join(baseDir, "whisper");
   whisperModel = path.join(whisperDir, "ggml-base.bin");
-  whisperExe = fs.existsSync(path.join(whisperDir, "whisper-cli.exe"))
-    ? path.join(whisperDir, "whisper-cli.exe")
-    : path.join(whisperDir, "main.exe");
+
+  const isWin = process.platform === "win32";
+  const exeName = isWin ? "whisper-cli.exe" : "whisper-cli";
+  const fallbackName = isWin ? "main.exe" : "main";
+
+  whisperExe = fs.existsSync(path.join(whisperDir, exeName))
+    ? path.join(whisperDir, exeName)
+    : path.join(whisperDir, fallbackName);
 }
 
 export function isWhisperInstalled() {
@@ -50,10 +55,11 @@ export async function transcribeVoice(fileId, tmpDir) {
   // 3. Convert ogg to wav using ffmpeg
   try {
     await new Promise((resolve, reject) => {
-      const ffmpegPath = fs.existsSync(path.join(whisperDir, "ffmpeg.exe"))
-        ? `"${path.join(whisperDir, "ffmpeg.exe")}"`
+      const ffmpegLocal = process.platform === "win32" ? "ffmpeg.exe" : "ffmpeg";
+      const ffmpegPath = fs.existsSync(path.join(whisperDir, ffmpegLocal))
+        ? path.join(whisperDir, ffmpegLocal)
         : "ffmpeg";
-      const proc = spawn(ffmpegPath, ["-i", oggFile, "-ar", "16000", "-ac", "1", "-y", wavFile], { shell: true, windowsHide: true });
+      const proc = spawn(ffmpegPath, ["-i", oggFile, "-ar", "16000", "-ac", "1", "-y", wavFile], { windowsHide: true });
       proc.on("close", (code) => code === 0 ? resolve() : reject(new Error(`ffmpeg exited ${code}`)));
       proc.on("error", reject);
     });
@@ -66,7 +72,7 @@ export async function transcribeVoice(fileId, tmpDir) {
   // 4. Run whisper
   try {
     const result = await new Promise((resolve, reject) => {
-      const proc = spawn(`"${whisperExe}"`, ["-m", `"${whisperModel}"`, "-f", `"${wavFile}"`, "-l", "he", "--no-timestamps", "-nt"], { shell: true, timeout: 60_000, windowsHide: true });
+      const proc = spawn(whisperExe, ["-m", whisperModel, "-f", wavFile, "-l", "he", "--no-timestamps", "-nt"], { timeout: 60_000, windowsHide: true });
       let stdout = "";
       let stderr = "";
       proc.stdout.on("data", (d) => stdout += d);

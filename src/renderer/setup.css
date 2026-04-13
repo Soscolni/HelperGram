@@ -269,6 +269,31 @@ body {
   accent-color: #5b8dee;
 }
 
+/* Guide toggle */
+.guide-toggle {
+  margin-top: 12px;
+}
+
+.guide-toggle summary {
+  cursor: pointer;
+  color: #5b8dee;
+  font-size: 13px;
+  user-select: none;
+}
+
+.guide-toggle summary:hover {
+  text-decoration: underline;
+}
+
+.guide-img {
+  margin-top: 10px;
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #2a2a4a;
+}
+
 /* Hidden */
 .hidden {
   display: none !important;

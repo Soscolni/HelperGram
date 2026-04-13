@@ -49,7 +49,8 @@ export class ClaudeCliProvider {
     fs.writeFileSync(msgFile, userMessage);
 
     return new Promise((resolve, reject) => {
-      const cmd = `type "${msgFile}" | claude -p --system-prompt-file "${sysFile}" --model ${this.model} --no-session-persistence`;
+      const pipeCmd = process.platform === "win32" ? "type" : "cat";
+      const cmd = `${pipeCmd} "${msgFile}" | claude -p --system-prompt-file "${sysFile}" --model ${this.model} --no-session-persistence`;
       const proc = spawn(cmd, [], { shell: true, timeout: 120_000, windowsHide: true });
 
       let stdout = "";
