@@ -20,6 +20,12 @@ body {
   margin-bottom: 20px;
 }
 
+.header-logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 4px;
+}
+
 .header h1 {
   font-size: 24px;
   color: #fff;

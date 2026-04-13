@@ -1,8 +1,10 @@
-# HelperGram
+<p align="center">
+  <img src="assets/helpergram.png" alt="HelperGram" width="300">
+</p>
 
-Personal Telegram assistant bot powered by Claude Code CLI (Max subscription).
+Personal Telegram assistant bot with an easy GUI setup wizard.
 
-Uses `claude -p` instead of the Anthropic API, so it runs on your Claude Code Max subscription at no extra token cost.
+Supports multiple AI providers: **Anthropic Claude**, **OpenAI GPT**, **Google Gemini**, and **Claude Code CLI** (free with Max subscription).
 
 ## Features
 
