@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - 'release/v*'
 
 permissions:
   contents: write
@@ -38,6 +40,18 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Determine release tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          else
+            # Branch is like "release/v4.0.0" — strip the "release/" prefix
+            tag="${GITHUB_REF_NAME#release/}"
+            echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install dependencies
         run: npm ci
 
@@ -52,8 +66,9 @@ jobs:
       - name: Upload artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: ${{ steps.tag.outputs.tag }}
+          target_commitish: main
           draft: false
           prerelease: false
           generate_release_notes: true
