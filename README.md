@@ -19,16 +19,7 @@ Supports multiple AI providers: **Anthropic Claude**, **OpenAI GPT**, and **Goog
 
 ## Installation
 
-### Option 1: Prebuilt installer (recommended)
-
-Grab the latest release for your platform from the [Releases](https://github.com/Soscolni/HelperGram/releases) page:
-
-- **Windows** — NSIS installer (`.exe`)
-- **macOS** — DMG disk image (`.dmg`)
-
-Run the installer, launch HelperGram, and follow the setup wizard.
-
-### Option 2: Run from source
+No prebuilt installers are published yet — run from source for now.
 
 Prerequisites:
 
