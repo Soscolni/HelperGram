@@ -2,57 +2,78 @@
   <img src="assets/helpergram.png" alt="HelperGram" width="300">
 </p>
 
-Personal Telegram assistant bot with an easy GUI setup wizard.
+Personal Telegram assistant bot with an easy GUI setup wizard, packaged as a cross-platform Electron desktop app.
 
-Supports multiple AI providers: **Anthropic Claude**, **OpenAI GPT**, **Google Gemini**, and **Claude Code CLI** (free with Max subscription).
+Supports multiple AI providers: **Anthropic Claude**, **OpenAI GPT**, and **Google Gemini** — configure any of them through the built-in setup wizard on first launch.
 
 ## Features
 
+- **GUI Setup Wizard** — configure your Telegram token, chat ID, and AI provider without touching config files
 - **Task Management** — multiple named task lists with priorities, due dates, and status tracking
 - **Notes** — tagged notes with search and filtering
 - **Reminders** — one-time and daily recurring reminders with snooze and follow-ups
-- **Voice Messages** — Hebrew speech-to-text via Whisper
+- **Voice Messages** — Hebrew speech-to-text via Whisper (optional)
 - **Web Search** — real-time info lookup via DuckDuckGo
 - **Memory** — persistent long-term memory of user context and preferences
 - **Daily Summary** — overview of tasks, reminders, and activity
-- **Auto-Update** — pull from GitHub and restart with `/update`
 
-## Prerequisites
+## Installation
 
-- Node.js 18+
-- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
-- A Telegram bot token (from [@BotFather](https://t.me/BotFather))
-- ffmpeg (for voice messages): `winget install ffmpeg`
+### Option 1: Prebuilt installer (recommended)
 
-## Setup
+Grab the latest release for your platform from the [Releases](https://github.com/Soscolni/HelperGram/releases) page:
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/Soscolni/HelperGram.git
-   cd HelperGram
-   ```
+- **Windows** — NSIS installer (`.exe`)
+- **macOS** — DMG disk image (`.dmg`)
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Run the installer, launch HelperGram, and follow the setup wizard.
 
-3. Create `.env` from the example:
-   ```bash
-   cp .env.example .env
-   ```
-   Fill in your `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`.
+### Option 2: Run from source
 
-4. (Optional) Set up Whisper for voice transcription:
-   ```bash
-   node setup-whisper.js
-   ```
+Prerequisites:
 
-5. Start the bot:
-   ```bash
-   node launcher.js
-   ```
-   Or directly: `npm start`
+- [Node.js](https://nodejs.org/) 18 or newer (includes `npm`)
+- A Telegram bot token from [@BotFather](https://t.me/BotFather)
+- An API key for at least one supported provider (Anthropic, OpenAI, or Google)
+- (Optional) `ffmpeg` on your `PATH` if you want voice-message transcription
+
+Steps:
+
+```bash
+# Clone the repo
+git clone https://github.com/Soscolni/HelperGram.git
+cd HelperGram
+
+# Install dependencies — this also downloads the Electron runtime
+npm install
+
+# Launch the Electron app
+npm start
+```
+
+`npm install` pulls in Electron as a dev dependency, so you don't need to install it globally. `npm start` runs `electron .`, which opens the HelperGram desktop window. On first launch the setup wizard walks you through entering your Telegram credentials and choosing an AI provider.
+
+### (Optional) Voice message support
+
+To enable Hebrew speech-to-text, run the Whisper setup script once after installing dependencies:
+
+```bash
+node setup-whisper.js
+```
+
+This downloads the Whisper binary and model. You'll also need `ffmpeg` available on your `PATH` for audio decoding.
+
+## Building installers
+
+To produce distributable installers yourself:
+
+```bash
+npm run build        # build for the current platform
+npm run build:win    # Windows NSIS installer
+npm run build:mac    # macOS DMG
+```
+
+Output is written to the `dist/` directory.
 
 ## Bot Commands
 
@@ -62,19 +83,21 @@ Supports multiple AI providers: **Anthropic Claude**, **OpenAI GPT**, **Google G
 | `/notes` | Show all notes |
 | `/reminders` | Show active reminders |
 | `/summary` | Daily summary |
-| `/update` | Pull latest code and restart |
 | `/version` | Show current version |
 | `/help` | Show available commands |
 
 ## Architecture
 
-- **index.js** — main bot logic: Telegram polling, Claude CLI integration, tool execution, data persistence
-- **launcher.js** — process wrapper for auto-restart on updates
-- **setup-whisper.js** — downloads and configures Whisper binary + model
+- **src/main/** — Electron main process: window lifecycle, IPC, bot supervision
+- **src/preload/** — Electron preload scripts bridging renderer and main
+- **src/renderer/** — GUI setup wizard and settings UI
+- **src/bot/** — Telegram polling, AI provider integrations, tool execution, data persistence
+- **setup-whisper.js** — downloads and configures the Whisper binary + model
 
 ## Data Storage
 
-All data is stored locally as JSON files:
+All data is stored locally as JSON files alongside the app's user data:
+
 - `tasks/*.json` — task lists (one file per list)
 - `data.json` — notes and reminders
 - `daily/*.json` — daily check-in logs
