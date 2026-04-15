@@ -53,7 +53,11 @@ jobs:
           fi
 
       - name: Install dependencies
-        run: npm ci
+        # Using `npm install` rather than `npm ci` so the build tolerates
+        # a package-lock.json whose top-level version hasn't been bumped
+        # in lock-step with package.json. The --no-audit/--no-fund flags
+        # just keep the log noise down.
+        run: npm install --no-audit --no-fund
 
       - name: Build
         run: npm run ${{ matrix.build_script }}
