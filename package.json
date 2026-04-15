@@ -1,6 +1,6 @@
 {
   "name": "helpergram",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Personal Telegram assistant with easy GUI setup — powered by Claude, GPT, or Gemini",
   "type": "module",
   "main": "src/main/main.js",
